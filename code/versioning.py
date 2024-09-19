@@ -3,7 +3,7 @@ import torch
 import json
 from collections import Counter
 
-model_version_dir = "../models"
+model_version_dir = "models"
 data_version_dir = "datasets"
 
 if not os.path.exists(data_version_dir):

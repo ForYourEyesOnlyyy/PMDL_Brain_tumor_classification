@@ -1,11 +1,17 @@
-import versioning
-
-version = "v1.0.0"
-
+import code.versioning as versioning
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
+
+version = "v1.0.0"
+
+label_mapping = {
+    'glioma_tumor': 0,
+    'meningioma_tumor': 1,
+    'no_tumor': 2,
+    'pituitary_tumor': 3
+}
 
 class CNN(nn.Module):
     def __init__(self):
@@ -60,15 +66,17 @@ class CNN(nn.Module):
     def forward(self, x):
         return self.model(x)
 
-def load_model():
+def load_model(version = version):
     model = CNN()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
     versioning.load_model(model, optimizer, version)
 
-    return model, optimizer
+    return model
 
 def predict(data, model):
+    reverse_label_mapping = {v: k for k, v in label_mapping.items()}
+
     data = torch.tensor(data, dtype=torch.float32)
     data = data.unsqueeze(0)
 
@@ -79,7 +87,7 @@ def predict(data, model):
 
         outputs = model(data)
         
-        _, label = torch.max(outputs.data, 1)
-    return label.item()
+        _, label = torch.max(outputs, 1)
+    return reverse_label_mapping.get(label.item(), "Unknown")
 
     

@@ -1,4 +1,4 @@
-import versioning
+import code.versioning as versioning
 
 version = "v1.0.0"
 

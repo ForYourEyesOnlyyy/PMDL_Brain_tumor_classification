@@ -1,22 +1,17 @@
-# Dockerfile for Streamlit
+# Use the official Python slim image as the base image
+FROM python:3.12-slim
 
-# Use the official Python image from Docker Hub
-FROM python:3.9-slim
+# Set the working directory in the container
+WORKDIR /usr/src/app
 
-# Set the working directory inside the container
-WORKDIR /app
+# Copy the requirements file to the working directory
+COPY requirements.txt . 
 
-# Copy the requirements.txt file from the root directory to the container
-COPY ./requirements.txt /app/requirements.txt
-
-# Install dependencies from requirements.txt
-RUN pip install --no-cache-dir -r /app/requirements.txt
-
-# Copy the Streamlit app code to the container
-COPY ./app.py /app
+# Install the required Python packages
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Expose the port Streamlit will run on
 EXPOSE 8501
 
-# Command to run the Streamlit app
-CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.enableCORS=false"]
+# Set the command to run the Streamlit app
+CMD ["streamlit", "run", "code/deployment/app/app.py", "--server.port=8501", "--server.address=0.0.0.0"]

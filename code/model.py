@@ -67,27 +67,29 @@ class CNN(nn.Module):
         return self.model(x)
 
 def load_model(version = version):
+
     model = CNN()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+    
 
     versioning.load_model(model, optimizer, version)
 
     return model
 
-def predict(data, model):
+def predict_tumor(data, model):
     reverse_label_mapping = {v: k for k, v in label_mapping.items()}
 
     data = torch.tensor(data, dtype=torch.float32)
     data = data.unsqueeze(0)
 
     with torch.no_grad():
-        model.eval()
-
         model.to("cpu")
 
         outputs = model(data)
         
         _, label = torch.max(outputs, 1)
+        # print(label.item())
+
     return reverse_label_mapping.get(label.item(), "Unknown")
 
     

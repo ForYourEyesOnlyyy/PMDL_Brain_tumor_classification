@@ -2,6 +2,9 @@ import os
 import torch
 import json
 from collections import Counter
+import warnings
+
+warnings.filterwarnings("ignore")
 
 model_version_dir = "models"
 data_version_dir = "datasets"
@@ -30,13 +33,13 @@ def save_model(model, optimizer, epoch, loss, accuracy, version):
     if not os.path.exists(model_dir):
         os.makedirs(model_dir)
     
-    # Save the model state
+    # Save the complete model
     model_path = os.path.join(model_dir, 'model.pt')  # Changed to `.pt`
-    torch.save(model.state_dict(), model_path)
+    torch.save(model, model_path)
     
-    # Save the optimizer state
+    # Save the complete optimizer
     optimizer_path = os.path.join(model_dir, 'optimizer.pt')  # Changed to `.pt`
-    torch.save(optimizer.state_dict(), optimizer_path)
+    torch.save(optimizer, optimizer_path)
     
     # Save metadata
     metadata = {

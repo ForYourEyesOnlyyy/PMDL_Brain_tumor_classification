@@ -1,4 +1,4 @@
-from code.model import load_model, predict
+from code.model import load_model, predict_tumor
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import JSONResponse
 import numpy as np
@@ -11,8 +11,11 @@ image_size = 256
 
 app = FastAPI()
 
+model = load_model(version=model_version)
+
 @app.post("/predict/")
 async def predict(file: UploadFile = File(...)):
+    global model
     try:
         # Read the uploaded file and convert it into an OpenCV image
         image_stream = io.BytesIO(await file.read())
@@ -25,8 +28,7 @@ async def predict(file: UploadFile = File(...)):
         img = np.expand_dims(img, axis=0)
 
         # Call the model's prediction function
-        model, _ = load_model(model_version)
-        prediction = predict(img, model)
+        prediction = predict_tumor(img, model)
 
         return JSONResponse(content={"prediction": prediction})
 

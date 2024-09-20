@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  fastapi:
+    build:
+      context: ../../  # Set context to project root
+      dockerfile: ./code/deployment/api/Dockerfile  # Adjust the path to the FastAPI Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../../code:/usr/src/app/code    # Mount the code directory
+      - ../../models:/usr/src/app/models  # Mount the models directory
+    networks:
+      - app-network
+
+  streamlit:
+    build:
+      context: ../../  # Set context to project root
+      dockerfile: ./code/deployment/app/Dockerfile  # Adjust the path to the Streamlit Dockerfile
+    ports:
+      - "8501:8501"
+    networks:
+      - app-network
+    depends_on:
+      - fastapi
+    environment:
+      - FASTAPI_URL=http://fastapi:8000/predict/
+
+networks:
+  app-network:
+    driver: bridge

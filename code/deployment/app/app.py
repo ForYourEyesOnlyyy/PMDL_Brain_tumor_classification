@@ -2,9 +2,10 @@ import streamlit as st
 import requests
 from PIL import Image
 import io
+import os
 
 # Define FastAPI backend URL
-FASTAPI_URL = "http://127.0.0.1:8000/predict/"
+FASTAPI_URL = os.getenv("FASTAPI_URL", "http://localhost:8000/predict/")
 
 st.title("Brain Tumor Classification App")
 st.write("Upload an MRI image to classify the tumor type.")

@@ -67,11 +67,11 @@ def load_model(model, optimizer, version):
     
     # Load model state
     model_path = os.path.join(model_dir, 'model.pt')  # Changed to `.pt`
-    model.load_state_dict(torch.load(model_path))
+    model.load_state_dict(torch.load(model_path, map_location="cpu"))
     
     # Load optimizer state
     optimizer_path = os.path.join(model_dir, 'optimizer.pt')  # Changed to `.pt`
-    optimizer.load_state_dict(torch.load(optimizer_path))
+    optimizer.load_state_dict(torch.load(optimizer_path, map_location="cpu"))
     
     # Load metadata (optional)
     metadata_path = os.path.join(model_dir, 'metadata.json')

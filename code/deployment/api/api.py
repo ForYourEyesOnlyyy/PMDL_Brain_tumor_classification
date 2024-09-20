@@ -1,10 +1,14 @@
-from code.model import load_model, predict_tumor
+import os
+import sys
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import JSONResponse
 import numpy as np
 import cv2
 import io
 from PIL import Image
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+from model import load_model, predict_tumor
 
 model_version = "v1.0.0"
 image_size = 256

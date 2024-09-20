@@ -10,6 +10,8 @@ COPY requirements.txt .
 # Install the required Python packages
 RUN pip install --no-cache-dir -r requirements.txt
 
+COPY ./code/deployment/app /usr/src/app/code/deployment/app
+
 # Expose the port Streamlit will run on
 EXPOSE 8501
 
